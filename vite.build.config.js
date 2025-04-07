@@ -6,15 +6,15 @@ export default defineConfig({
     build: {
         outDir: "../dist",
         lib: {
-            name: "<%= name %>",
-            entry: "<%= name %>.js",
-            fileName: "<%= name %>",
+            name: "ilw-modal",
+            entry: "ilw-modal.js",
+            fileName: "ilw-modal",
             formats: ["es", "cjs", "umd"],
         },
         rollupOptions: {
             output: {
                 assetFileNames: (chunkInfo) => {
-                    if (chunkInfo.name === "style.css") return "<%= name %>.css";
+                    if (chunkInfo.name === "style.css") return "ilw-modal.css";
                 },
             },
         },

@@ -1,9 +1,9 @@
 {
-    "title": "<%= _.startCase(name.slice(4)) %>",
-    "tag": "<%= name %>",
-    "github": "https://github.com/web-illinois/<%= name %>/",
+    "title": "Modal",
+    "tag": "ilw-modal",
+    "github": "https://github.com/web-illinois/ilw-modal/",
     "type": "web component",
-    "element-name": "<%= name %>",
+    "element-name": "ilw-modal",
     "description": "Description for builder.",
     "purpose": "Imperative mood purpose for builder homepage.",
     "toolkit-version": "",
