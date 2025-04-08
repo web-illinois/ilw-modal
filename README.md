@@ -6,8 +6,17 @@ Links: **[ilw-modal in Builder](https://builder3.toolkit.illinois.edu/component/
 
 ## Overview
 
-A 1-3 paragraph explanation of what the component does and how it presents.
+The Illinois theme component ilw-modal provides a modal dialog box that is displayed on top of the current page. It is used to display information or prompt the user for input without navigating away from the current page.
 
+The default color background color is white, there is also a gray option for the background.
+
+The default size for the modal is medium, there is also a small and large option.
+
+There is a close button in the top right corner of the modal. The modal can be closed by clicking the close button or by clicking outside the modal.
+
+There is a slot for the modal title, body, and an optional image.
+
+To trigger the modal, place a button or link with the attribute `data-modal-target` and the id of the modal you want to open.
 ## Code Examples
 
 ```html
