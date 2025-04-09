@@ -1,6 +1,6 @@
 {
     "name": "@illinois-toolkit/ilw-modal",
-    "description": "One paragraph description of the component.",
+    "description": "Illinois Toolkit: provides a modal that opens on top of a web page.",
     "repository": "github:web-illinois/ilw-modal",
     "private": false,
     "license": "MIT",
