@@ -10,8 +10,33 @@
     <script type="module" src="/src/ilw-modal.js"></script>
 </head>
 
-<body style="margin: 0; padding: 0;">
-<ilw-modal></ilw-modal>
+<body style="margin: 0 auto; padding: 0; max-width: 1200px;">
+<a href="javascript:void(0)" class="ilw-button" data-modal-target="modal-id" role="button">Open Modal</a>
+
+<button class="ilw-button" data-modal-target="modal-id1">Open Modal</button>
+
+
+<button class="ilw-button" data-modal-target="modal-id2">Open Modal</button>
+
+
+
+<ilw-modal id="modal-id" size="small" theme="gray">
+    <img src="https://picsum.photos/570/300" alt="" slot="image">
+    <h2 slot="title">Small Modal</h2>
+    <div>This is a small modal.</div>
+</ilw-modal>
+
+<ilw-modal id="modal-id1" size="medium">
+    <h2 slot="title">Medium Modal</h2>
+    <div>This is a medium modal.</div>
+        <button class="ilw-button" autofocus>Submit</button>
+</ilw-modal>
+
+<ilw-modal id="modal-id2" size="large">
+    <h2 slot="title">Large Modal</h2>
+    <div>This is a large modal.</div>
+</ilw-modal>
+
 </body>
 
 </html>

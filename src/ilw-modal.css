@@ -1,0 +1,9 @@
+:root {
+  --ilw-modal--small: 35%;
+  --ilw-modal--medium: 50%;
+  --ilw-modal--large: 75%;
+  --ilw-modal--heading-color: var(--il-blue);
+  --ilw-modal--text-color: var(--ilw-text--color);
+  --ilw-modal--heading--font-size: 1.5em;
+  --ilw-modal--border-top: 8px solid var(--il-orange);
+}

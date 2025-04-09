@@ -7,3 +7,83 @@
 
 :host {
 }
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-start;
+    padding-top: 20vh;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+:host([open]) .backdrop {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal {
+    background: #fff;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: var(--ilw-modal--medium);
+    width: 100%;
+    position: relative;
+    border-top: var(--ilw-modal--border-top);
+}
+
+.modal.small {
+    max-width: var(--ilw-modal--small);
+}
+.modal.medium {
+    max-width: var(--ilw-modal--medium);
+}
+.modal.large {
+    max-width: var(--ilw-modal--large);
+}
+
+.modal[aria-hidden="true"] {
+    display: none;
+}
+.modal-image {
+    width: 100%;
+    height: auto;
+}
+.modal-image.hidden {
+    display: none;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font: 1.5rem var(--il-font-heading);
+    color: var(--il-blue);
+    margin: 0;
+}
+
+.modal-body {
+    margin-top: 1rem;
+    font: 1.125rem var(--il-font-sans);
+    color: var(--ilw-modal--text-color);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #333;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
