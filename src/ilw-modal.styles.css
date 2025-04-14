@@ -1,7 +1,18 @@
 /* Styleable variables are in the base layer so they can be overridden easily */
 @layer base {
     :host {
-
+        --ilw-modal--small: 35%;
+        --ilw-modal--medium: 50%;
+        --ilw-modal--large: 75%;
+        --ilw-modal--image-height: 350px;
+        --ilw-modal--heading-color: var(--il-blue);
+        --ilw-modal--text-color: var(--ilw-text--color);
+        --ilw-modal--heading--font-size: 1.5em;
+        --ilw-modal--border-top: 8px solid var(--il-orange);
+        --ilw-modal--background: #fff;
+        --ilw-modal--close-btn--color: var(--il-blue);
+        --ilw-modal--close-btn--background-color: rgba(255, 255, 255, 0.7);
+        --ilw-modal--close-btn--hover-color: var(--il-orange);
     }
 }
 
@@ -30,7 +41,6 @@
 
 .modal {
     background: #fff;
-    padding: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     max-width: var(--ilw-modal--medium);
     width: 100%;
@@ -40,50 +50,113 @@
 
 .modal.small {
     max-width: var(--ilw-modal--small);
+    .modal-image ::slotted(*) {
+        height: 200px;
+    }
 }
 .modal.medium {
     max-width: var(--ilw-modal--medium);
+    .modal-image ::slotted(*) {
+        height: 300px;
+    }
 }
 .modal.large {
     max-width: var(--ilw-modal--large);
+    .modal-image ::slotted(*) {
+        height: 400px;
+    }
 }
 
+@media (max-width: 600px) {
+    .modal.small,
+    .modal.medium,
+    .modal.large {
+        max-width: 100%;
+        margin: 0.5rem;
+    }
+}
 .modal[aria-hidden="true"] {
     display: none;
 }
 .modal-image {
+    position: relative;
     width: 100%;
     height: auto;
 }
-.modal-image.hidden {
-    display: none;
+
+.modal-image ::slotted(*) {
+    width: 100%;
+    height: var(--ilw-modal--image-height);
+    object-fit: cover;
+    display: block;
 }
+
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 1.5rem;
+}
+
+.modal-header.with-image {
+    margin-top: 0;
+    justify-content: flex-start;
 }
 
 .modal-header h2 {
+    margin: 0;
+    padding: 0;
     font: 1.5rem var(--il-font-heading);
     color: var(--il-blue);
-    margin: 0;
+}
+.modal.center {
+    .modal-header {
+        justify-content: center;
+    }
+    .modal-body {
+        text-align: center;
+    }
 }
 
 .modal-body {
-    margin-top: 1rem;
+    margin-bottom: 2rem;
     font: 1.125rem var(--il-font-sans);
     color: var(--ilw-modal--text-color);
+    padding: 0 1.5rem;
+}
+.hidden {
+    display: none;
 }
 
 .close-btn {
-    background: none;
+    color: var(--ilw-modal--close-btn--color);
+    background-color: var(--ilw-modal--close-btn--background-color);
     border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #333;
-    line-height: 1;
+    border-radius: 50%;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+.close-btn svg {
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.close-btn:hover {
+    color: var(--ilw-modal--close-btn--hover-color);
+}
+
+.close-btn:focus {
+    color: var(--ilw-link--focus-color);
+    background-color: var(--ilw-link--focus-background-color);
+    outline: var(--ilw-link--focus-outline);
 }

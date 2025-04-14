@@ -9,6 +9,7 @@ class Modal extends LitElement {
             theme: { type: String, attribute: true },
             open: { type: Boolean, reflect: true },
             size: { type: String, attribute: true },
+            align: { type: String, attribute: true },
             _hasGraphic: { state: true, type: Boolean }
         };
     }
@@ -22,24 +23,23 @@ class Modal extends LitElement {
         this.theme = '';
         this.open = false;
         this.size = 'medium';
+        this.align = '';
         this._hasGraphic = false;
     }
 
-    /**
-     * Tracks the number of graphic elements in the card, so we can
-     * hide the graphics container if there's no graphics.
-     *
-     * @private
-     */
-    _slotsChanged() {
-        const images = this.shadowRoot.querySelector("slot[name=image]");
-        if (images.assignedElements().length > 0) {
-            this._hasGraphic = true;
-            return;
+    firstUpdated() {
+        this.updateComplete.then(() => this._slotsChanged());
+    }
+
+    _slotsChanged = () => {
+        const slot = this.shadowRoot.querySelector("slot[name=image]");
+        if (slot) {
+            const hasImage = slot.assignedElements().length > 0;
+            if (hasImage !== this._hasGraphic) {
+                this._hasGraphic = hasImage;
+            }
         }
-        this._hasGraphic = false;
     }
-
 
     connectedCallback() {
         super.connectedCallback();
@@ -64,20 +64,33 @@ class Modal extends LitElement {
 
     render() {
         return html`
-          <div class="backdrop" @click=${this.closeModal} aria-hidden=${!this.open}>
-    <div class="modal ${this.size}" role="dialog" aria-labelledby="modal-title" aria-modal="true" @click=${e => e.stopPropagation()}>
-    <div class="modal-header">
-          <div class="modal-image ${this._hasGraphic ? '' : 'hidden'}">
-          <slot name="image" @slotchange=${this._slotsChanged}></slot>
-    </div>
-        <h2 id="modal-title"><slot name="title"></slot></h2>
-        <button class="close-btn" @click=${this.closeModal} aria-label="Close modal">&times;</button>
-    </div>
-        <div class="modal-body">
-            <slot></slot>
-        </div>
-    </div>
-    </div>
+            <div class="backdrop" @click=${this.closeModal} aria-hidden=${!this.open}>
+                <div class="modal ${this.size} ${this.align}" role="dialog" aria-labelledby="modal-title" aria-modal="true" @click=${e => e.stopPropagation()}>
+
+                    <div class="modal-image ${this._hasGraphic ? '' : 'hidden'}">
+                        <slot name="image" @slotchange=${this._slotsChanged}></slot>
+                        <button class="close-btn" @click=${this.closeModal} aria-label="Close modal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51.26 51.26">
+                            <path fill="currentColor" d="m37.84 32.94-7.63-7.63 7.63-7.63a3.24 3.24 0 0 0-4.58-4.58l-7.63 7.63L18 13.1a3.24 3.24 0 0 0-4.58 4.58L21 25.31l-7.62 7.63A3.24 3.24 0 1 0 18 37.52l7.63-7.63 7.63 7.63a3.24 3.24 0 0 0 4.58-4.58Z"/>
+                        </svg></button>
+                    </div>
+
+                    <div class="modal-header ${this._hasGraphic ? 'with-image' : ''}">
+                        <h2 id="modal-title"><slot name="title"></slot></h2>
+                        ${!this._hasGraphic ? html`
+                            <button class="close-btn" @click=${this.closeModal} aria-label="Close modal">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51.26 51.26">
+                                    <path fill="currentColor" d="m37.84 32.94-7.63-7.63 7.63-7.63a3.24 3.24 0 0 0-4.58-4.58l-7.63 7.63L18 13.1a3.24 3.24 0 0 0-4.58 4.58L21 25.31l-7.62 7.63A3.24 3.24 0 1 0 18 37.52l7.63-7.63 7.63 7.63a3.24 3.24 0 0 0 4.58-4.58Z"/>
+                                </svg>
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    <div class="modal-body">
+                        <slot></slot>
+                    </div>
+
+                </div>
+            </div>
         `;
     }
 }
