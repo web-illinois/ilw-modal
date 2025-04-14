@@ -25,18 +25,28 @@ class Modal extends LitElement {
         this.size = 'medium';
         this.align = '';
         this._hasGraphic = false;
+
+        this._focusableElements = [];
+        this._firstFocusable = null;
+        this._lastFocusable = null;
+        this._activeTrigger = null;
     }
 
     firstUpdated() {
         this.updateComplete.then(() => this._slotsChanged());
     }
 
-    _slotsChanged = () => {
-        const slot = this.shadowRoot.querySelector("slot[name=image]");
-        if (slot) {
-            const hasImage = slot.assignedElements().length > 0;
-            if (hasImage !== this._hasGraphic) {
-                this._hasGraphic = hasImage;
+    updated(changedProps) {
+        if (changedProps.has('open')) {
+            if (this.open) {
+                this._setInitialFocus();
+                document.addEventListener('keydown', this._handleKeydown);
+            } else {
+                document.removeEventListener('keydown', this._handleKeydown);
+                if (this._activeTrigger) {
+                    this._activeTrigger.focus();
+                    this._activeTrigger = null;
+                }
             }
         }
     }
@@ -49,12 +59,15 @@ class Modal extends LitElement {
     disconnectedCallback() {
         super.disconnectedCallback();
         document.removeEventListener('click', this.handleExternalTrigger);
+        document.removeEventListener('keydown', this._handleKeydown);
     }
 
     handleExternalTrigger = (event) => {
         const target = event.target.closest('[data-modal-target]');
         if (target && target.getAttribute('data-modal-target') === this.id) {
+            this._activeTrigger = target;
             this.open = true;
+            requestAnimationFrame(() => this._setInitialFocus());
         }
     };
 
@@ -62,9 +75,81 @@ class Modal extends LitElement {
         this.open = false;
     }
 
+    _slotsChanged = () => {
+        const slot = this.shadowRoot.querySelector("slot[name=image]");
+        if (slot) {
+            const hasImage = slot.assignedElements().length > 0;
+            if (hasImage !== this._hasGraphic) {
+                this._hasGraphic = hasImage;
+            }
+        }
+    }
+
+    _setInitialFocus() {
+        // Select focusables in Shadow DOM
+        const shadowFocusables = this.shadowRoot.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+
+        // Select focusables in slotted content (light DOM)
+        const slots = this.shadowRoot.querySelectorAll('slot');
+        let lightFocusables = [];
+
+        slots.forEach(slot => {
+            const assigned = slot.assignedElements({ flatten: true }) || [];
+            assigned.forEach(el => {
+                lightFocusables.push(...el.querySelectorAll(
+                  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                ));
+                // If the element itself is focusable
+                if (el.matches('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')) {
+                    lightFocusables.push(el);
+                }
+            });
+        });
+
+        this._focusableElements = [...shadowFocusables, ...lightFocusables];
+        this._firstFocusable = this._focusableElements[0];
+        this._lastFocusable = this._focusableElements[this._focusableElements.length - 1];
+
+        if (this._firstFocusable) {
+            this._firstFocusable.focus();
+        }
+    }
+
+    _handleKeydown = (e) => {
+        if (!this.open || this._focusableElements.length === 0) return;
+
+        const activeElement = this.getRootNode().activeElement;
+
+        switch (e.key) {
+            case 'Escape':
+                this.closeModal();
+                break;
+
+            case 'Tab':
+                e.preventDefault();
+                const currentIndex = this._focusableElements.indexOf(activeElement);
+
+                if (e.shiftKey) {
+                    const prevIndex = (currentIndex - 1 + this._focusableElements.length) % this._focusableElements.length;
+                    this._focusableElements[prevIndex].focus();
+                } else {
+                    const nextIndex = (currentIndex + 1) % this._focusableElements.length;
+                    this._focusableElements[nextIndex].focus();
+                }
+                break;
+
+            case 'Enter':
+                // Optional: only close on Enter if it's on a specific button
+                break;
+        }
+    }
+
+
     render() {
         return html`
-            <div class="backdrop" @click=${this.closeModal} aria-hidden=${!this.open}>
+            <div class="backdrop" tabindex="-1" @click=${this.closeModal} aria-hidden=${!this.open}>
                 <div class="modal ${this.size} ${this.align}" role="dialog" aria-labelledby="modal-title" aria-modal="true" @click=${e => e.stopPropagation()}>
 
                     <div class="modal-image ${this._hasGraphic ? '' : 'hidden'}">
