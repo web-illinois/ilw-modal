@@ -120,7 +120,7 @@ class Modal extends LitElement {
     _handleKeydown = (e) => {
         if (!this.open || this._focusableElements.length === 0) return;
 
-        const activeElement = this.getRootNode().activeElement;
+        const activeElement = this.shadowRoot.activeElement || document.activeElement;
 
         switch (e.key) {
             case 'Escape':
@@ -131,6 +131,12 @@ class Modal extends LitElement {
                 e.preventDefault();
                 const currentIndex = this._focusableElements.indexOf(activeElement);
 
+                if (currentIndex === -1) {
+                    // Fallback if focus is not in list
+                    this._firstFocusable.focus();
+                    return;
+                }
+
                 if (e.shiftKey) {
                     const prevIndex = (currentIndex - 1 + this._focusableElements.length) % this._focusableElements.length;
                     this._focusableElements[prevIndex].focus();
@@ -139,12 +145,8 @@ class Modal extends LitElement {
                     this._focusableElements[nextIndex].focus();
                 }
                 break;
-
-            case 'Enter':
-                // Optional: only close on Enter if it's on a specific button
-                break;
         }
-    }
+    };
 
 
     render() {
