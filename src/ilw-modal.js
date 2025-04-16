@@ -86,36 +86,59 @@ class Modal extends LitElement {
     }
 
     _setInitialFocus() {
-        // Select focusables in Shadow DOM
         const shadowFocusables = this.shadowRoot.querySelectorAll(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
 
-        // Select focusables in slotted content (light DOM)
         const slots = this.shadowRoot.querySelectorAll('slot');
         let lightFocusables = [];
 
         slots.forEach(slot => {
-            const assigned = slot.assignedElements({ flatten: true }) || [];
-            assigned.forEach(el => {
-                lightFocusables.push(...el.querySelectorAll(
-                  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-                ));
-                // If the element itself is focusable
+            const assignedElements = slot.assignedElements({ flatten: true }) || [];
+
+            assignedElements.forEach(el => {
+                // If an autofocus element is present, use it and return early
+                if (el.hasAttribute('autofocus')) {
+                    el.focus();
+                    return;
+                }
+
+                // Include the element itself if it’s focusable
                 if (el.matches('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')) {
                     lightFocusables.push(el);
                 }
+
+                // Include all focusable descendants
+                lightFocusables.push(...el.querySelectorAll(
+                  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                ));
             });
         });
 
-        this._focusableElements = [...shadowFocusables, ...lightFocusables];
+        const allFocusables = [...lightFocusables, ...shadowFocusables];
+
+        // Move close buttons to the end of the list
+        const closeButtons = allFocusables.filter(el => el.classList.contains('close-btn'));
+        this._focusableElements = allFocusables.filter(el => !el.classList.contains('close-btn')).concat(closeButtons);
+
         this._firstFocusable = this._focusableElements[0];
         this._lastFocusable = this._focusableElements[this._focusableElements.length - 1];
 
-        if (this._firstFocusable) {
-            this._firstFocusable.focus();
+        // If nothing is currently focused, set initial focus
+        if (!document.activeElement || document.activeElement === document.body) {
+            if (this._firstFocusable) {
+                this._firstFocusable.focus();
+            } else {
+                // Fallback: focus the modal container if no focusables found
+                const modalContainer = this.shadowRoot.querySelector('.modal');
+                if (modalContainer) {
+                    modalContainer.setAttribute('tabindex', '-1');
+                    modalContainer.focus({ preventScroll: true });
+                }
+            }
         }
     }
+
 
     _handleKeydown = (e) => {
         if (!this.open || this._focusableElements.length === 0) return;
