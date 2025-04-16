@@ -3,7 +3,7 @@
     :host {
         --ilw-modal--small: 35%;
         --ilw-modal--medium: 50%;
-        --ilw-modal--large: 75%;
+        --ilw-modal--large: 1200px;
         --ilw-modal--image-height: 350px;
         --ilw-modal--heading-color: var(--il-blue);
         --ilw-modal--text-color: var(--ilw-text--color);
