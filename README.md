@@ -12,6 +12,8 @@ The default color background color is white, there is also a gray option for the
 
 The default size for the modal is medium, there is also a small and large option.
 
+Text alignment is left by default, but can be changed to center.
+
 There is a close button in the top right corner of the modal. The modal can be closed by clicking the close button or by clicking outside the modal.
 
 There is a slot for the modal title, body, and an optional image.
@@ -19,9 +21,11 @@ There is a slot for the modal title, body, and an optional image.
 To trigger the modal, place a button or link with the attribute `data-modal-target` and the id of the modal you want to open.
 
 ### Attributes
-* size: Default is ```medium```: width = 50%, other options are  ```small```: width = 35% and ```large```: width = 75%.
+* size: Default is ```medium```: width = 50%, other options are  ```small```: width = 35% and ```large```: width = 1200px.
 
-* theme: Default is white background. Other themes available are ```gray```.
+* theme: Default is white background. Other theme available is ```gray```.
+
+* align: Default is left. Other option is ```center```.
 
 ## Code Example For Button Triggering Modal
 
@@ -33,19 +37,40 @@ To trigger the modal, place a button or link with the attribute `data-modal-targ
 ## Code Example For Modal
 
 ```html
-<ilw-modal id="modal-id" size="small">
-    <h2 slot="title">Small Modal</h2>
-    <div slot="body">This is a small modal.</div>
+<ilw-modal id="modal-id" size="small" theme="gray" align="center">
+    <img src="https://picsum.photos/570/300" alt="" slot="image">
+    <h2 slot="title">Apply to the College</h2>
+    <div style="margin-bottom: 1rem;">Congratulations! You've taken the first step to becoming a student of the College of Education.
+        The application process is different for undergraduate and graduate studies.</div>
+    <button class="ilw-button">Undergraduate Degree</button>
+    <button class="ilw-button">Graduate Degree and Transcriptable Credential</button>
+    <button class="ilw-button">Non-Degree Credential</button>
 </ilw-modal>
 
 <ilw-modal id="modal-id1" size="medium">
+    <img src="https://picsum.photos/700/400" alt="" slot="image">
     <h2 slot="title">Medium Modal</h2>
-    <div slot="body">This is a medium modal.</div>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lectus velit, feugiat in lacinia eget, tristique ut orci. Phasellus ut egestas tellus. In hac habitasse platea dictumst.</p>
+    <form>
+        <label for="email">Enter your email</label>
+        <div class="form-row">
+            <input type="email" id="email" name="email" required>
+            <button class="ilw-button" type="submit">Submit</button>
+        </div>
+    </form>
 </ilw-modal>
 
 <ilw-modal id="modal-id2" size="large">
+    <img src="https://picsum.photos/1200/500" alt="" slot="image">
     <h2 slot="title">Large Modal</h2>
-    <div slot="body">This is a large modal.</div>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lectus velit, feugiat in lacinia eget, tristique ut orci. Phasellus ut egestas tellus. In hac habitasse platea dictumst.</p>
+    <form>
+        <label for="email">Enter your email</label>
+        <div class="form-row">
+            <input type="email" id="email" name="email" required>
+            <button class="ilw-button" type="submit">Submit</button>
+        </div>
+    </form>
 </ilw-modal>
 ```
 
