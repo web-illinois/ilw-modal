@@ -177,27 +177,27 @@ class Modal extends LitElement {
             <div class="backdrop" tabindex="-1" @click=${this.closeModal} aria-hidden=${!this.open}>
                 <div class="modal ${this.size} ${this.align}" role="dialog" aria-labelledby="modal-title" aria-modal="true" @click=${e => e.stopPropagation()}>
 
+                    <!-- Title -->
+                    <div class="modal-header">
+                        <h2 id="modal-title"><slot name="title"></slot></h2>
+                    </div>
+
+                    <!-- Image -->
                     <div class="modal-image ${this._hasGraphic ? '' : 'hidden'}">
                         <slot name="image" @slotchange=${this._slotsChanged}></slot>
-                        <button class="close-btn" @click=${this.closeModal} aria-label="Close modal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51.26 51.26">
-                            <path fill="currentColor" d="m37.84 32.94-7.63-7.63 7.63-7.63a3.24 3.24 0 0 0-4.58-4.58l-7.63 7.63L18 13.1a3.24 3.24 0 0 0-4.58 4.58L21 25.31l-7.62 7.63A3.24 3.24 0 1 0 18 37.52l7.63-7.63 7.63 7.63a3.24 3.24 0 0 0 4.58-4.58Z"/>
-                        </svg></button>
                     </div>
 
-                    <div class="modal-header ${this._hasGraphic ? 'with-image' : ''}">
-                        <h2 id="modal-title"><slot name="title"></slot></h2>
-                        ${!this._hasGraphic ? html`
-                            <button class="close-btn" @click=${this.closeModal} aria-label="Close modal">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51.26 51.26">
-                                    <path fill="currentColor" d="m37.84 32.94-7.63-7.63 7.63-7.63a3.24 3.24 0 0 0-4.58-4.58l-7.63 7.63L18 13.1a3.24 3.24 0 0 0-4.58 4.58L21 25.31l-7.62 7.63A3.24 3.24 0 1 0 18 37.52l7.63-7.63 7.63 7.63a3.24 3.24 0 0 0 4.58-4.58Z"/>
-                                </svg>
-                            </button>
-                        ` : ''}
-                    </div>
-
+                    <!-- Main body content -->
                     <div class="modal-body">
                         <slot></slot>
                     </div>
+
+                    <!-- Close button -->
+                    <button class="close-btn" @click=${this.closeModal} aria-label="Close modal">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51.26 51.26">
+                            <path fill="currentColor" d="m37.84 32.94-7.63-7.63 7.63-7.63a3.24 3.24 0 0 0-4.58-4.58l-7.63 7.63L18 13.1a3.24 3.24 0 0 0-4.58 4.58L21 25.31l-7.62 7.63A3.24 3.24 0 1 0 18 37.52l7.63-7.63 7.63 7.63a3.24 3.24 0 0 0 4.58-4.58Z"/>
+                        </svg>
+                    </button>
 
                 </div>
             </div>
