@@ -21,6 +21,8 @@ There is a slot for the modal title, body, and an optional image.
 To trigger the modal, place a button or link with the attribute `data-modal-target` and the id of the modal you want to open.
 
 ### Attributes
+* id: The id of the modal. This is used to trigger the modal from a button or link. The default is `modal`.
+
 * size: Default is ```medium```: width = 50%, other options are  ```small```: width = 35% and ```large```: width = 1200px.
 
 * theme: Default is white background. Other theme available is ```gray```.
@@ -30,14 +32,14 @@ To trigger the modal, place a button or link with the attribute `data-modal-targ
 ## Code Example For Button Triggering Modal
 
 ```html
-<button class="ilw-button" data-modal-target="modal-id">Open Modal</button>
+<button class="ilw-button" data-modal-target="modal">Open Modal</button>
 
-<a href="javascript:void(0)" class="ilw-button" data-modal-target="modal-id" role="button">Open Modal</a>
+<a href="javascript:void(0)" class="ilw-button" data-modal-target="modal" role="button">Open Modal</a>
 ```
 ## Code Example For Modal
 
 ```html
-<ilw-modal id="modal-id" size="small" theme="gray" align="center">
+<ilw-modal size="small" theme="gray" align="center">
     <img src="https://picsum.photos/570/300" alt="" slot="image">
     <h2 slot="title">Apply to the College</h2>
     <div style="margin-bottom: 1rem;">Congratulations! You've taken the first step to becoming a student of the College of Education.
@@ -47,7 +49,7 @@ To trigger the modal, place a button or link with the attribute `data-modal-targ
     <button class="ilw-button">Non-Degree Credential</button>
 </ilw-modal>
 
-<ilw-modal id="modal-id1" size="medium">
+<ilw-modal id="modal-id" size="medium">
     <img src="https://picsum.photos/700/400" alt="" slot="image">
     <h2 slot="title">Medium Modal</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lectus velit, feugiat in lacinia eget, tristique ut orci. Phasellus ut egestas tellus. In hac habitasse platea dictumst.</p>
@@ -60,7 +62,7 @@ To trigger the modal, place a button or link with the attribute `data-modal-targ
     </form>
 </ilw-modal>
 
-<ilw-modal id="modal-id2" size="large">
+<ilw-modal id="modal-id1" size="large">
     <img src="https://picsum.photos/1200/500" alt="" slot="image">
     <h2 slot="title">Large Modal</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lectus velit, feugiat in lacinia eget, tristique ut orci. Phasellus ut egestas tellus. In hac habitasse platea dictumst.</p>

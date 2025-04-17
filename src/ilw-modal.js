@@ -10,6 +10,7 @@ class Modal extends LitElement {
             open: { type: Boolean, reflect: true },
             size: { type: String, attribute: true },
             align: { type: String, attribute: true },
+            id: { type: String, attribute: true },
             _hasGraphic: { state: true, type: Boolean }
         };
     }
@@ -24,6 +25,7 @@ class Modal extends LitElement {
         this.open = false;
         this.size = 'medium';
         this.align = '';
+        this.id = 'modal';
         this._hasGraphic = false;
 
         this._focusableElements = [];
