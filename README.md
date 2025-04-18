@@ -21,7 +21,7 @@ There is a slot for the modal title, body, and an optional image.
 To trigger the modal, place a button or link with the attribute `data-modal-target` and the id of the modal you want to open.
 
 ### Attributes
-* id: The id of the modal. This is used to trigger the modal from a button or link. The default is `modal`.
+* id: The id of the modal is required. This is used to trigger the modal from a button or link. The default is `modal`.  The ID must be unique on the page.
 
 * size: Default is ```medium```: width = 50%, other options are  ```small```: width = 35% and ```large```: width = 1200px.
 
@@ -29,17 +29,17 @@ To trigger the modal, place a button or link with the attribute `data-modal-targ
 
 * align: Default is left. Other option is ```center```.
 
-## Code Example For Button Triggering Modal
+## Code Example for Button Triggering the Modal
 
 ```html
 <button class="ilw-button" data-modal-target="modal">Open Modal</button>
 
 <a href="javascript:void(0)" class="ilw-button" data-modal-target="modal" role="button">Open Modal</a>
 ```
-## Code Example For Modal
+## Code Example for Modal
 
 ```html
-<ilw-modal size="small" theme="gray" align="center">
+<ilw-modal size="small" theme="gray" align="center" id="modal">
     <img src="https://picsum.photos/570/300" alt="" slot="image">
     <h2 slot="title">Apply to the College</h2>
     <div style="margin-bottom: 1rem;">Congratulations! You've taken the first step to becoming a student of the College of Education.
