@@ -37,7 +37,7 @@
         {
             "depreciated": false,
             "name": "id",
-            "description" : "The ID of the modal. This is needed for the button to open the modal.",
+            "description" : "Provide your own id for the modal, this will replace the default id.",
             "type": "string",
             "value": ""
         }
