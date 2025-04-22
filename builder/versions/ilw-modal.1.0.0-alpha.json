@@ -13,6 +13,7 @@
     "production": false,
     "notes": "",
     "parent-style": "",
+    "addon-html": "<button class='ilw-button' data-modal-target='modal'>Open Modal</button> -- <a href='javascript:void(0)' class='ilw-button' data-modal-target='modal' role='button'>Open Modal</a>",
     "samples": [
         {
             "name": "default",
