@@ -1,0 +1,81 @@
+{
+    "title": "Modal",
+    "tag": "ilw-modal",
+    "github": "https://github.com/web-illinois/ilw-modal/",
+    "type": "web component",
+    "element-name": "ilw-modal",
+    "description": "The modal component provides a modal that opens on top of a web page.",
+    "builder-version": "1.0",
+    "version": "1.0.0",
+    "date": "04/17/2025",
+    "css": "https://cdn.toolkit.illinois.edu/ilw-modal/1.0/ilw-modal.css",
+    "js": "https://cdn.toolkit.illinois.edu/ilw-modal/1.0/ilw-modal.js",
+    "production": true,
+    "notes": "",
+    "parent-style": "",
+    "addon-html": "<button class='ilw-button' data-modal-target='modal'>Open Modal Button</button> -- <a href='javascript:void(0)' class='ilw-button' data-modal-target='modal' role='button'>Open Modal Link</a>",
+    "samples": [
+        {
+            "name": "default",
+            "description": "Default information",
+            "text": "<h2 slot=\"title\">Default Modal</h2>\n    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lectus velit, feugiat in lacinia eget, tristique ut orci. Phasellus ut egestas tellus. In hac habitasse platea dictumst.</p>\n    <form style=\"display: flex; flex-direction: column; gap: 1rem;\">\n        <label style=\"font-size: 1rem; font-weight: bold;\" for=\"email\">Enter your email</label>\n        <div style=\"display: flex; gap: 1rem; width: 100%; align-items: center;\">\n            <input style=\"flex: 1; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;\" type=\"email\" id=\"email\" name=\"email\" required>\n            <button class=\"ilw-button\" type=\"submit\">Submit</button>\n        </div>\n    </form>"
+        },
+        {
+            "name": "image",
+            "description": "Modal with an image",
+            "text": "<img src=\"https://picsum.photos/700/400\" alt=\"\" slot=\"image\">\n    <h2 slot=\"title\">Medium Modal</h2>\n    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lectus velit, feugiat in lacinia eget, tristique ut orci. Phasellus ut egestas tellus. In hac habitasse platea dictumst.</p>\n    <form style=\"display: flex; flex-direction: column; gap: 1rem;\">\n        <label style=\"font-size: 1rem; font-weight: bold;\" for=\"email\">Enter your email</label>\n        <div style=\"display: flex; gap: 1rem; width: 100%; align-items: center;\">\n            <input style=\"flex: 1; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;\" type=\"email\" id=\"email\" name=\"email\" required>\n            <button class=\"ilw-button\" type=\"submit\">Submit</button>\n        </div>\n    </form>"
+        }
+    ],
+    "attributes-fixed": [
+        {
+            "name": "id",
+            "description": "id of the modal",
+            "depreciated": false,
+            "value": "modal"
+        }
+    ],
+    "attributes-text": [
+        {
+            "depreciated": false,
+            "name": "id",
+            "description" : "Provide your own id for the modal, this will replace the default id.",
+            "type": "string",
+            "value": ""
+        }
+    ],
+    "attributes": [
+        {
+            "name": "theme",
+            "description": "Color theme used",
+            "depreciated": false,
+            "values": [
+                "",
+                "gray"
+            ]
+        },
+        {
+            "name": "size",
+            "description": "Size of modal window",
+            "depreciated": false,
+            "values": [
+                "",
+                "small",
+                "medium",
+                "large"
+            ]
+        },
+        {
+            "name": "align",
+            "description": "Alignment of content in modal window",
+            "depreciated": false,
+            "values": [
+                "",
+                "center"
+            ]
+        }
+    ],
+    "classes-fixed": [],
+    "classes": [],
+    "css-variables": [
+    ]
+}
