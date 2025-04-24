@@ -34,7 +34,7 @@ class Modal extends LitElement {
         this._activeTrigger = null;
     }
 
-    firstUpdated() {
+    firstUpdated(_changedProps) {
         this.updateComplete.then(() => this._slotsChanged());
     }
 
@@ -88,6 +88,14 @@ class Modal extends LitElement {
     }
 
     _setInitialFocus() {
+        const modalContainer = this.shadowRoot.querySelector('.modal');
+        if (modalContainer) {
+            // Ensure it's focusable
+            modalContainer.setAttribute('tabindex', '-1');
+            modalContainer.focus({ preventScroll: true });
+        }
+
+        // Collect focusable elements
         const shadowFocusables = this.shadowRoot.querySelectorAll(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
@@ -99,18 +107,15 @@ class Modal extends LitElement {
             const assignedElements = slot.assignedElements({ flatten: true }) || [];
 
             assignedElements.forEach(el => {
-                // If an autofocus element is present, use it and return early
                 if (el.hasAttribute('autofocus')) {
                     el.focus();
                     return;
                 }
 
-                // Include the element itself if it’s focusable
                 if (el.matches('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')) {
                     lightFocusables.push(el);
                 }
 
-                // Include all focusable descendants
                 lightFocusables.push(...el.querySelectorAll(
                   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
                 ));
@@ -119,28 +124,13 @@ class Modal extends LitElement {
 
         const allFocusables = [...lightFocusables, ...shadowFocusables];
 
-        // Move close buttons to the end of the list
+        // Move close buttons to end
         const closeButtons = allFocusables.filter(el => el.classList.contains('close-btn'));
         this._focusableElements = allFocusables.filter(el => !el.classList.contains('close-btn')).concat(closeButtons);
 
         this._firstFocusable = this._focusableElements[0];
         this._lastFocusable = this._focusableElements[this._focusableElements.length - 1];
-
-        // If nothing is currently focused, set initial focus
-        if (!document.activeElement || document.activeElement === document.body) {
-            if (this._firstFocusable) {
-                this._firstFocusable.focus();
-            } else {
-                // Fallback: focus the modal container if no focusables found
-                const modalContainer = this.shadowRoot.querySelector('.modal');
-                if (modalContainer) {
-                    modalContainer.setAttribute('tabindex', '-1');
-                    modalContainer.focus({ preventScroll: true });
-                }
-            }
-        }
     }
-
 
     _handleKeydown = (e) => {
         if (!this.open || this._focusableElements.length === 0) return;
@@ -176,8 +166,8 @@ class Modal extends LitElement {
 
     render() {
         return html`
-            <div class="backdrop" tabindex="-1" @click=${this.closeModal} aria-hidden=${!this.open}>
-                <div class="modal ${this.size} ${this.align}" role="dialog" aria-labelledby="modal-title" aria-modal="true" @click=${e => e.stopPropagation()}>
+            <div class="backdrop" @click=${this.closeModal} aria-hidden=${!this.open}>
+                <div class="modal ${this.size} ${this.align}" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description" tabindex="-1" aria-modal="true" @click=${e => e.stopPropagation()}>
 
                     <!-- Title -->
                     <div class="modal-header">
@@ -190,7 +180,7 @@ class Modal extends LitElement {
                     </div>
 
                     <!-- Main body content -->
-                    <div class="modal-body">
+                    <div class="modal-body" id="modal-description">
                         <slot></slot>
                     </div>
 
