@@ -7,5 +7,7 @@ ilw-modal {
   }
   h2 {
     font-family: var(--ilw-modal--heading--font);
+    font-size: var(--ilw-modal--heading--font-size);
+    color: var(--ilw-modal--heading-color);
   }
 }

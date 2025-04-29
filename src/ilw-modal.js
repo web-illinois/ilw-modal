@@ -170,8 +170,8 @@ class Modal extends LitElement {
                 <div class="modal ${this.size} ${this.align}" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description" tabindex="-1" aria-modal="true" @click=${e => e.stopPropagation()}>
 
                     <!-- Title -->
-                    <div class="modal-header">
-                        <h2 id="modal-title"><slot name="title"></slot></h2>
+                    <div class="modal-header" id="modal-title">
+                        <slot name="title"></slot>
                     </div>
 
                     <!-- Image -->
