@@ -5,10 +5,10 @@
         --ilw-modal--medium: 50%;
         --ilw-modal--large: 1200px;
         --ilw-modal--image-height: 350px;
-        --ilw-modal--heading-color: var(--il-blue);
         --ilw-modal--text-color: var(--ilw-text--color);
+        --ilw-modal--heading-color: var(--il-blue);
         --ilw-modal--heading--font: var(--il-font-montserrat);
-        --ilw-modal--heading--font-size: 1.5em;
+        --ilw-modal--heading--font-size: 2.25rem;
         --ilw-modal--border-top: 8px solid var(--il-orange);
         --ilw-modal--background: #fff;
         --ilw-modal--close-btn--color: var(--il-blue);
