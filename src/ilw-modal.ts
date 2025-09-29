@@ -5,7 +5,7 @@ import styles from './ilw-modal.styles.css?inline';
 import './ilw-modal.css';
 
 @customElement('ilw-modal')
-export class Modal extends LitElement {
+export default class Modal extends LitElement {
     @property({ type: String, attribute: true })
     theme: string = '';
 

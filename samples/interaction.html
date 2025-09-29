@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modal Component - Interactive Tests</title>
+  <link rel="stylesheet" href="https://cdn.brand.illinois.edu/illinois.css">
+  <link rel="stylesheet" href="https://dev.toolkit.illinois.edu/ilw-global/3.0.0-alpha/ilw-global.css">
+  <script type="module" src="/src/ilw-modal.ts"></script>
+  <style>
+    body {
+      margin: 0 auto;
+      padding: 0;
+      max-width: 1200px;
+    }
+
+    section {
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      border: 1px solid #ddd;
+    }
+
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    form label {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      align-items: center;
+    }
+
+    form input[type="email"] {
+      flex: 1;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Modal Interactive Testing</h1>
+
+<section>
+  <h2>Test 1: Basic Modal with Image</h2>
+  <p>This tests the basic modal opening, closing, and focus management.</p>
+  <button class="ilw-button" data-modal-target="modal-basic">Open Basic Modal</button>
+
+  <ilw-modal id="modal-basic">
+    <img src="https://picsum.photos/570/300" alt="Scenic landscape" slot="image">
+    <h2 slot="title">Apply to the College</h2>
+    <div>Congratulations! You've taken the first step to becoming a student of the College of Education.
+      The application process is different for undergraduate and graduate studies.</div>
+    <button class="ilw-button">Undergraduate Degree</button>
+    <button class="ilw-button">Graduate Degree and Transcriptable Credential</button>
+    <button class="ilw-button">Non-Degree Credential</button>
+  </ilw-modal>
+</section>
+
+<section>
+  <h2>Test 2: Modal with Form</h2>
+  <p>This tests keyboard navigation within form elements inside the modal.</p>
+  <button class="ilw-button" data-modal-target="modal-form">Open Form Modal</button>
+
+  <ilw-modal id="modal-form" size="large">
+    <h2 slot="title">Subscribe to Newsletter</h2>
+    <p>Enter your email address to receive updates.</p>
+    <form>
+      <label for="email">Email Address</label>
+      <div class="form-row">
+        <input type="email" id="email" name="email" required>
+        <button class="ilw-button" type="submit">Submit</button>
+      </div>
+    </form>
+  </ilw-modal>
+</section>
+
+<section>
+  <h2>Test 3: Small Modal (Gray Theme)</h2>
+  <p>This tests size and theme variations.</p>
+  <button class="ilw-button" data-modal-target="modal-small">Open Small Modal</button>
+
+  <ilw-modal id="modal-small" size="small" theme="gray">
+    <h2 slot="title">Quick Message</h2>
+    <p>This is a small modal with minimal content to test the compact layout.</p>
+    <button class="ilw-button">Got it</button>
+  </ilw-modal>
+</section>
+
+<section>
+  <h2>Test 4: Centered Content Modal</h2>
+  <p>This tests the center alignment option.</p>
+  <button class="ilw-button" data-modal-target="modal-centered">Open Centered Modal</button>
+
+  <ilw-modal id="modal-centered" align="center">
+    <h2 slot="title">Centered Content</h2>
+    <p>All content in this modal should be centered.</p>
+    <button class="ilw-button">Primary Action</button>
+    <button class="ilw-button">Secondary Action</button>
+  </ilw-modal>
+</section>
+
+<section>
+  <h2>Test 5: Link Button</h2>
+  <p>This tests that the modal can be opened from a link that looks like a button.</p>
+  <a href="#" class="ilw-button" data-modal-target="modal-button">Open from Link</a>
+
+  <ilw-modal id="modal-button">
+    <h2 slot="title">Link Trigger</h2>
+    <p>This modal was opened from a link.</p>
+    <button class="ilw-button">Action Button</button>
+  </ilw-modal>
+</section>
+
+</body>
+
+</html>
