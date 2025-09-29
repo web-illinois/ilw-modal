@@ -1,7 +1,4 @@
 ilw-modal {
-  &[theme="gray"] {
-    --ilw-modal--background: var(--il-storm-lighter-4);
-  }
   div, p {
     margin-bottom: 1rem;
   }
