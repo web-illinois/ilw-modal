@@ -6,7 +6,7 @@
     "element-name": "ilw-modal",
     "description": "The modal component provides a modal that opens on top of a web page.",
     "purpose": "To provide a modal window to open content on top of a web page.",
-    "toolkit-version": "1.0",
-    "production-version": "1.0",
+    "toolkit-version": "1.1",
+    "production-version": "1.1",
     "development-version": "1.0-alpha"
 }
