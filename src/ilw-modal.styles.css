@@ -5,15 +5,15 @@
         --ilw-modal--medium: 50%;
         --ilw-modal--large: 1200px;
         --ilw-modal--image-height: 350px;
-        --ilw-modal--text-color: var(--ilw-text--color);
-        --ilw-modal--heading-color: var(--il-blue);
+        --ilw-modal--text-color: var(--ilw-color--text);
+        --ilw-modal--heading-color: var(---ilw-color--heading);
         --ilw-modal--heading--font: var(--il-font-montserrat);
         --ilw-modal--heading--font-size: 2.25rem;
-        --ilw-modal--border-top: 8px solid var(--il-orange);
-        --ilw-modal--background: #fff;
-        --ilw-modal--close-btn--color: var(--il-blue);
+        --ilw-modal--border-top: 8px solid var(--ilw-color--control-accent);
+        --ilw-modal--background: var(--ilw-color--background);
+        --ilw-modal--close-btn--color: var(--ilw-color--control-text);
         --ilw-modal--close-btn--background-color: rgba(255, 255, 255, 0.7);
-        --ilw-modal--close-btn--hover-color: var(--il-orange);
+        --ilw-modal--close-btn--hover-color: var(--ilw-color--control-accent);
     }
 }
 
@@ -114,7 +114,7 @@
     margin: 0;
     padding: 0;
     font: 1.5rem var(--ilw-modal--heading--font);
-    color: var(--il-blue);
+    color: var(--ilw-color--heading);
 }
 .modal.center {
     .modal-header {
@@ -166,7 +166,7 @@
 }
 
 .close-btn:focus {
-    color: var(--ilw-link--focus-color);
-    background-color: var(--ilw-link--focus-background-color);
-    outline: var(--ilw-link--focus-outline);
+    color: var(--ilw-color--focus--text);
+    background-color: var(--ilw-color--focus--background);
+    outline: solid var(--ilw-color--focus--outline) 1px;
 }

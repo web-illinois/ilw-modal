@@ -54,6 +54,12 @@ jobs:
       - run: npm install
       - run: npm rebuild
       - run: npm run-script build
+
+      # Run this to get the axe report
+      # This only uses Chrome, so it doesn't have to run the full Playwright install
+      - name: Run axe-core tests
+        run: npm run test:axe:github
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -63,31 +69,48 @@ jobs:
 
       - name: Deploy toolbox to S3 bucket for major version
         if: ${{ steps.get_version.outputs.prerelease == '' }}
-        run: aws s3 sync ./dist/ s3://cdn.toolkit.illinois.edu/content/$COMPONENT_NAME/$MAJORVERSION --delete --acl bucket-owner-full-control
+        run: aws s3 sync ./dist/cdn/ s3://cdn.toolkit.illinois.edu/content/$COMPONENT_NAME/$MAJORVERSION --delete --acl bucket-owner-full-control
       - name: Invalidate Cloudfront cache for major version
         if: ${{ steps.get_version.outputs.prerelease == '' }}
         run: aws cloudfront create-invalidation --distribution-id ${{ vars.TOOLKIT_AWS_CLOUDFRONT }} --paths "/$COMPONENT_NAME/$MAJORVERSION*"
       - name: Deploy toolbox to S3 bucket for minor version
         if: ${{ steps.get_version.outputs.prerelease == '' }}
-        run: aws s3 sync ./dist/ s3://cdn.toolkit.illinois.edu/content/$COMPONENT_NAME/$MINORVERSION --delete --acl bucket-owner-full-control
+        run: aws s3 sync ./dist/cdn/ s3://cdn.toolkit.illinois.edu/content/$COMPONENT_NAME/$MINORVERSION --delete --acl bucket-owner-full-control
       - name: Invalidate Cloudfront cache for minor version
         if: ${{ steps.get_version.outputs.prerelease == '' }}
         run: aws cloudfront create-invalidation --distribution-id ${{ vars.TOOLKIT_AWS_CLOUDFRONT }} --paths "/$COMPONENT_NAME/$MINORVERSION*"
       - name: Deploy toolbox to S3 bucket for patch (full) version
         if: ${{ steps.get_version.outputs.prerelease == '' }}
-        run: aws s3 sync ./dist/ s3://cdn.toolkit.illinois.edu/content/$COMPONENT_NAME/$FULLVERSION --delete --acl bucket-owner-full-control
+        run: aws s3 sync ./dist/cdn/ s3://cdn.toolkit.illinois.edu/content/$COMPONENT_NAME/$FULLVERSION --delete --acl bucket-owner-full-control
       - name: Invalidate Cloudfront cache for patch (full) version
         if: ${{ steps.get_version.outputs.prerelease == '' }}
         run: aws cloudfront create-invalidation --distribution-id ${{ vars.TOOLKIT_AWS_CLOUDFRONT }} --paths "/$COMPONENT_NAME/$FULLVERSION*"
       - name: Deploy toolbox to S3 bucket for full version dev
         if: ${{ steps.get_version.outputs.prerelease != '' }}
-        run: aws s3 sync ./dist/ s3://dev.toolkit.illinois.edu/content/$COMPONENT_NAME/$FULLVERSION --delete --acl bucket-owner-full-control
+        run: aws s3 sync ./dist/cdn/ s3://dev.toolkit.illinois.edu/content/$COMPONENT_NAME/$FULLVERSION --delete --acl bucket-owner-full-control
       - name: Invalidate Cloudfront cache for full version dev
         if: ${{ steps.get_version.outputs.prerelease != '' }}
         run: aws cloudfront create-invalidation --distribution-id ${{ vars.TOOLKIT_AWS_CLOUDFRONT_DEV }} --paths "/$COMPONENT_NAME/$FULLVERSION*"
       - name: Deploy toolbox to S3 bucket for latest dev
         if: ${{ steps.get_version.outputs.prerelease != '' }}
-        run: aws s3 sync ./dist/ s3://dev.toolkit.illinois.edu/content/$COMPONENT_NAME/latest --delete --acl bucket-owner-full-control
+        run: aws s3 sync ./dist/cdn/ s3://dev.toolkit.illinois.edu/content/$COMPONENT_NAME/latest --delete --acl bucket-owner-full-control
       - name: Invalidate Cloudfront cache for latest dev
         if: ${{ steps.get_version.outputs.prerelease != '' }}
         run: aws cloudfront create-invalidation --distribution-id ${{ vars.TOOLKIT_AWS_CLOUDFRONT_DEV }} --paths "/$COMPONENT_NAME/latest*"
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: npm ci
+      - name: Install to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.TOOLKIT_NPM_SECRET}}

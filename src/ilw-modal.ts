@@ -1,51 +1,56 @@
-import { LitElement, html, unsafeCSS } from "lit";
+import { LitElement, html, unsafeCSS, PropertyValues, CSSResult } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+// @ts-ignore
 import styles from './ilw-modal.styles.css?inline';
 import './ilw-modal.css';
 
-class Modal extends LitElement {
+@customElement('ilw-modal')
+export default class Modal extends LitElement {
+    @property({ type: String, attribute: true })
+    theme: string = '';
 
-    static get properties() {
-        return {
-            theme: { type: String, attribute: true },
-            open: { type: Boolean, reflect: true },
-            size: { type: String, attribute: true },
-            align: { type: String, attribute: true },
-            id: { type: String, attribute: true },
-            _hasGraphic: { state: true, type: Boolean }
-        };
-    }
+    @property({ type: Boolean, reflect: true })
+    open: boolean = false;
 
-    static get styles() {
+    @property({ type: String, attribute: true })
+    size: string = 'medium';
+
+    @property({ type: String, attribute: true })
+    align: string = '';
+
+    @property({ type: String, attribute: true })
+    override id: string = 'modal';
+
+    @state()
+    private _hasGraphic: boolean = false;
+
+    private _focusableElements: Element[] = [];
+    private _firstFocusable: Element | null = null;
+    private _lastFocusable: Element | null = null;
+    private _activeTrigger: Element | null = null;
+
+    static override get styles(): CSSResult {
         return unsafeCSS(styles);
     }
 
     constructor() {
         super();
-        this.theme = '';
-        this.open = false;
-        this.size = 'medium';
-        this.align = '';
-        this.id = 'modal';
-        this._hasGraphic = false;
-
-        this._focusableElements = [];
-        this._firstFocusable = null;
-        this._lastFocusable = null;
-        this._activeTrigger = null;
     }
 
-    firstUpdated(_changedProps) {
+    protected override firstUpdated(changedProps: PropertyValues): void {
+        super.firstUpdated(changedProps);
         this.updateComplete.then(() => this._slotsChanged());
     }
 
-    updated(changedProps) {
+    protected override updated(changedProps: PropertyValues): void {
+        super.updated(changedProps);
         if (changedProps.has('open')) {
             if (this.open) {
                 this._setInitialFocus();
                 document.addEventListener('keydown', this._handleKeydown);
             } else {
                 document.removeEventListener('keydown', this._handleKeydown);
-                if (this._activeTrigger) {
+                if (this._activeTrigger && this._activeTrigger instanceof HTMLElement) {
                     this._activeTrigger.focus();
                     this._activeTrigger = null;
                 }
@@ -53,19 +58,19 @@ class Modal extends LitElement {
         }
     }
 
-    connectedCallback() {
+    override connectedCallback(): void {
         super.connectedCallback();
         document.addEventListener('click', this.handleExternalTrigger);
     }
 
-    disconnectedCallback() {
+    override disconnectedCallback(): void {
         super.disconnectedCallback();
         document.removeEventListener('click', this.handleExternalTrigger);
         document.removeEventListener('keydown', this._handleKeydown);
     }
 
-    handleExternalTrigger = (event) => {
-        const target = event.target.closest('[data-modal-target]');
+    private handleExternalTrigger = (event: Event): void => {
+        const target = (event.target as Element)?.closest('[data-modal-target]');
         if (target && target.getAttribute('data-modal-target') === this.id) {
             this._activeTrigger = target;
             this.open = true;
@@ -73,12 +78,12 @@ class Modal extends LitElement {
         }
     };
 
-    closeModal() {
+    public closeModal(): void {
         this.open = false;
     }
 
-    _slotsChanged = () => {
-        const slot = this.shadowRoot.querySelector("slot[name=image]");
+    private _slotsChanged = (): void => {
+        const slot = this.shadowRoot?.querySelector("slot[name=image]") as HTMLSlotElement;
         if (slot) {
             const hasImage = slot.assignedElements().length > 0;
             if (hasImage !== this._hasGraphic) {
@@ -87,8 +92,8 @@ class Modal extends LitElement {
         }
     }
 
-    _setInitialFocus() {
-        const modalContainer = this.shadowRoot.querySelector('.modal');
+    private _setInitialFocus(): void {
+        const modalContainer = this.shadowRoot?.querySelector('.modal') as HTMLElement;
         if (modalContainer) {
             // Ensure it's focusable
             modalContainer.setAttribute('tabindex', '-1');
@@ -96,18 +101,20 @@ class Modal extends LitElement {
         }
 
         // Collect focusable elements
-        const shadowFocusables = this.shadowRoot.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        const shadowFocusables = Array.from(
+            this.shadowRoot?.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            ) || []
         );
 
-        const slots = this.shadowRoot.querySelectorAll('slot');
-        let lightFocusables = [];
+        const slots = this.shadowRoot?.querySelectorAll('slot') || [];
+        let lightFocusables: Element[] = [];
 
-        slots.forEach(slot => {
+        slots.forEach((slot: HTMLSlotElement) => {
             const assignedElements = slot.assignedElements({ flatten: true }) || [];
 
-            assignedElements.forEach(el => {
-                if (el.hasAttribute('autofocus')) {
+            assignedElements.forEach((el: Element) => {
+                if (el.hasAttribute('autofocus') && el instanceof HTMLElement) {
                     el.focus();
                     return;
                 }
@@ -116,26 +123,30 @@ class Modal extends LitElement {
                     lightFocusables.push(el);
                 }
 
-                lightFocusables.push(...el.querySelectorAll(
-                  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-                ));
+                lightFocusables.push(...Array.from(el.querySelectorAll(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                )));
             });
         });
 
         const allFocusables = [...lightFocusables, ...shadowFocusables];
 
         // Move close buttons to end
-        const closeButtons = allFocusables.filter(el => el.classList.contains('close-btn'));
-        this._focusableElements = allFocusables.filter(el => !el.classList.contains('close-btn')).concat(closeButtons);
+        const closeButtons = allFocusables.filter((el: Element) =>
+            el.classList.contains('close-btn')
+        );
+        this._focusableElements = allFocusables
+            .filter((el: Element) => !el.classList.contains('close-btn'))
+            .concat(closeButtons);
 
-        this._firstFocusable = this._focusableElements[0];
-        this._lastFocusable = this._focusableElements[this._focusableElements.length - 1];
+        this._firstFocusable = this._focusableElements[0] || null;
+        this._lastFocusable = this._focusableElements[this._focusableElements.length - 1] || null;
     }
 
-    _handleKeydown = (e) => {
+    private _handleKeydown = (e: KeyboardEvent): void => {
         if (!this.open || this._focusableElements.length === 0) return;
 
-        const activeElement = this.shadowRoot.activeElement || document.activeElement;
+        const activeElement = this.shadowRoot?.activeElement || document.activeElement;
 
         switch (e.key) {
             case 'Escape':
@@ -144,30 +155,37 @@ class Modal extends LitElement {
 
             case 'Tab':
                 e.preventDefault();
-                const currentIndex = this._focusableElements.indexOf(activeElement);
+                const currentIndex = this._focusableElements.indexOf(activeElement as Element);
 
                 if (currentIndex === -1) {
                     // Fallback if focus is not in list
-                    this._firstFocusable.focus();
+                    if (this._firstFocusable instanceof HTMLElement) {
+                        this._firstFocusable.focus();
+                    }
                     return;
                 }
 
                 if (e.shiftKey) {
                     const prevIndex = (currentIndex - 1 + this._focusableElements.length) % this._focusableElements.length;
-                    this._focusableElements[prevIndex].focus();
+                    const prevElement = this._focusableElements[prevIndex];
+                    if (prevElement instanceof HTMLElement) {
+                        prevElement.focus();
+                    }
                 } else {
                     const nextIndex = (currentIndex + 1) % this._focusableElements.length;
-                    this._focusableElements[nextIndex].focus();
+                    const nextElement = this._focusableElements[nextIndex];
+                    if (nextElement instanceof HTMLElement) {
+                        nextElement.focus();
+                    }
                 }
                 break;
         }
     };
 
-
-    render() {
+    protected override render() {
         return html`
             <div class="backdrop" @click=${this.closeModal} aria-hidden=${!this.open}>
-                <div class="modal ${this.size} ${this.align}" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description" tabindex="-1" aria-modal="true" @click=${e => e.stopPropagation()}>
+                <div class="modal ${this.size} ${this.align}" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description" tabindex="-1" aria-modal="true" @click=${(e: Event) => e.stopPropagation()}>
 
                     <!-- Title -->
                     <div class="modal-header" id="modal-title">
@@ -197,4 +215,8 @@ class Modal extends LitElement {
     }
 }
 
-customElements.define('ilw-modal', Modal);
+declare global {
+    interface HTMLElementTagNameMap {
+        'ilw-modal': Modal;
+    }
+}
