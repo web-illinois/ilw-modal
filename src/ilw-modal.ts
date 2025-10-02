@@ -3,7 +3,6 @@ import { customElement, property, state } from "lit/decorators.js";
 // @ts-ignore
 import styles from './ilw-modal.styles.css?inline';
 import './ilw-modal.css';
-import './ilw-colors.css';
 
 @customElement('ilw-modal')
 export default class Modal extends LitElement {
