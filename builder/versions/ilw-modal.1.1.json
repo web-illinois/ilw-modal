@@ -6,7 +6,7 @@
     "element-name": "ilw-modal",
     "description": "The modal component provides a modal that opens on top of a web page.",
     "builder-version": "1.1",
-    "version": "1.1.0",
+    "version": "1.1",
     "date": "10/02/2025",
     "css": "https://cdn.toolkit.illinois.edu/ilw-modal/1.1/ilw-modal.css",
     "js": "https://cdn.toolkit.illinois.edu/ilw-modal/1.1/ilw-modal.js",
