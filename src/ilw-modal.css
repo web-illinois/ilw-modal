@@ -5,6 +5,8 @@ ilw-modal {
   h2 {
     font-family: var(--ilw-modal--heading--font);
     font-size: var(--ilw-modal--heading--font-size);
+    line-height: var(--ilw-modal--heading--line-height);
+    margin: var(--ilw-modal--heading--margin);
     color: var(--ilw-modal--heading-color);
   }
 }
