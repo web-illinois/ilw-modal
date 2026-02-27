@@ -29,6 +29,51 @@ export default class Modal extends LitElement {
     private _lastFocusable: Element | null = null;
     private _activeTrigger: Element | null = null;
 
+    private static _scrollLockCount = 0;
+
+    private _prevHtmlOverflow: string | null = null;
+    private _prevBodyOverflow: string | null = null;
+    private _prevBodyPaddingRight: string | null = null;
+
+    private _lockPageScroll() {
+        if (Modal._scrollLockCount === 0) {
+            const html = document.documentElement;
+            const body = document.body;
+
+            this._prevHtmlOverflow = html.style.overflow;
+            this._prevBodyOverflow = body.style.overflow;
+            this._prevBodyPaddingRight = body.style.paddingRight;
+
+            // Prevent layout shift when scrollbar disappears
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            if (scrollbarWidth > 0) {
+                body.style.paddingRight = `${scrollbarWidth}px`;
+            }
+
+            html.style.overflow = 'hidden';
+            body.style.overflow = 'hidden';
+        }
+
+        Modal._scrollLockCount++;
+    }
+
+    private _unlockPageScroll() {
+        Modal._scrollLockCount = Math.max(0, Modal._scrollLockCount - 1);
+
+        if (Modal._scrollLockCount === 0) {
+            const html = document.documentElement;
+            const body = document.body;
+
+            html.style.overflow = this._prevHtmlOverflow ?? '';
+            body.style.overflow = this._prevBodyOverflow ?? '';
+            body.style.paddingRight = this._prevBodyPaddingRight ?? '';
+
+            this._prevHtmlOverflow = null;
+            this._prevBodyOverflow = null;
+            this._prevBodyPaddingRight = null;
+        }
+    }
+
     static override get styles(): CSSResult {
         return unsafeCSS(styles);
     }
@@ -44,12 +89,16 @@ export default class Modal extends LitElement {
 
     protected override updated(changedProps: PropertyValues): void {
         super.updated(changedProps);
+
         if (changedProps.has('open')) {
             if (this.open) {
+                this._lockPageScroll();
                 this._setInitialFocus();
                 document.addEventListener('keydown', this._handleKeydown);
             } else {
+                this._unlockPageScroll();
                 document.removeEventListener('keydown', this._handleKeydown);
+
                 if (this._activeTrigger && this._activeTrigger instanceof HTMLElement) {
                     this._activeTrigger.focus();
                     this._activeTrigger = null;
@@ -65,6 +114,7 @@ export default class Modal extends LitElement {
 
     override disconnectedCallback(): void {
         super.disconnectedCallback();
+        if (this.open) this._unlockPageScroll(); // Ensure scroll is unlocked if component is removed while open
         document.removeEventListener('click', this.handleExternalTrigger);
         document.removeEventListener('keydown', this._handleKeydown);
     }

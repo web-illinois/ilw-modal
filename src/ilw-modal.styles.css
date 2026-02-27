@@ -9,6 +9,8 @@
         --ilw-modal--heading-color: var(---ilw-color--heading);
         --ilw-modal--heading--font: var(--il-font-montserrat);
         --ilw-modal--heading--font-size: 2.25rem;
+        --ilw-modal--heading--line-height: 1.2;
+        --ilw-modal--heading--margin: 2rem 0 1.3125rem 0;
         --ilw-modal--border-top: 8px solid var(--ilw-color--control-accent);
         --ilw-modal--background: var(--ilw-color--background);
         --ilw-modal--close-btn--color: var(--ilw-color--control-text);
@@ -29,12 +31,15 @@
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: flex-start;
-    padding-top: 20vh;
+    padding-top: 5vh;
     justify-content: center;
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
+
 
 :host([open]) .backdrop {
     visibility: visible;
@@ -51,6 +56,9 @@
     border-top: var(--ilw-modal--border-top);
     display: flex;
     flex-direction: column;
+    max-height: 80vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .modal.small {
@@ -73,6 +81,9 @@
 }
 
 @media (max-width: 600px) {
+    .backdrop {
+        padding-top: 0;
+    }
     .modal.small,
     .modal.medium,
     .modal.large {
